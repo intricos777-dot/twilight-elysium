@@ -1,0 +1,12 @@
+{
+  "vm_name": "vm-te",
+  "os": "zen",
+  "memory_mb": 8192,
+  "cpus": 6,
+  "shared_workspace": "/home/sin/Projects/twilight-elysium",
+  "guest_tools": [
+    "self-heal.sh",
+    "self-debug.sh",
+    "bde-patrol.sh"
+  ]
+}
