@@ -37,6 +37,19 @@ class AudioDreamState:
         self.phase: float = 0.0
 
 
+class Directive:
+    """Narrative directive that can override generation behavior."""
+    def __init__(self, kind: str, payload: Optional[Dict] = None):
+        self.kind = kind
+        self.payload = payload or {}
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.payload
+
+    def get(self, key: str, default: Any = None) -> Any:
+        return self.payload.get(key, default)
+
+
 class ScriptDreamState:
     """State extracted from game scripts for dream generation."""
     def __init__(self):
@@ -44,9 +57,47 @@ class ScriptDreamState:
         self.enemies: List[Dict] = []
         self.locations: List[Dict] = []
         self.combat_events: List[Dict] = []
+        self.character_events: List[Dict] = []
         self.current_location: Optional[Dict] = None
         self.current_enemy: Optional[Dict] = None
         self.current_weapon: Optional[Dict] = None
+        self.directives: List[Directive] = []
+
+    def apply_directives(self) -> None:
+        """Mutate state based on loaded directives."""
+        if not self.directives:
+            return
+        for d in self.directives:
+            kind = d.kind.lower()
+            if kind == "hero_journey" or kind == "monomyth":
+                self.weapons = self.weapons[: max(0, len(self.weapons) - 2)]
+                self.enemies = self.enemies[: max(0, len(self.enemies) - 1)]
+                self.locations = self.locations[: max(1, len(self.locations) - 1)]
+            elif kind == "tragedy":
+                self.enemies = self.enemies * 2
+                self.weapons = self.weapons[:1]
+            elif kind == "boss_fight":
+                if self.enemies:
+                    self.enemies = self.enemies[:1]
+                    self.current_enemy = self.enemies[0]
+            elif kind == "exploration" or kind == "peaceful":
+                self.enemies = []
+                self.weapons = []
+            elif kind == "character_event":
+                name = d.get("name")
+                if name:
+                    matched = [e for e in self.character_events if name.lower() in str(e).lower()]
+                    if matched:
+                        self.current_enemy = matched[0]
+            elif kind == "force_character":
+                ctype = d.get("type", "knight")
+                forced = {
+                    "name": d.get("name", ctype),
+                    "type": ctype,
+                    "weapon": d.get("weapon", "longsword"),
+                    "position": d.get("position", [0, 0, 0]),
+                }
+                self.current_enemy = forced
 
 
 class DreamGenerator:
@@ -227,9 +278,9 @@ class DreamGenerator:
         return SceneObject(
             triangles=triangles,
             shader_id="wireframe",
-            position=(math.cos(t * 0.2) * 6, 0, math.sin(t * 0.2) * 6),
-            rotation=(0.0, t * 0.2, 0.0),
-            scale=(size, size, size)
+            position=Vec3(math.cos(t * 0.2) * 6, 0, math.sin(t * 0.2) * 6),
+            rotation=Vec3(0.0, t * 0.2, 0.0),
+            scale=float(size)
         )
     
     def _create_location_dream(self, location: Dict, t: float) -> SceneObject:
@@ -280,9 +331,9 @@ class DreamGenerator:
         return SceneObject(
             triangles=triangles,
             shader_id="wireframe",
-            position=(0.0, 0.0, 0.0),
-            rotation=(0.0, t * 0.1, 0.0),
-            scale=(1.0, 1.0, 1.0)
+            position=Vec3(0.0, 0.0, 0.0),
+            rotation=Vec3(0.0, t * 0.1, 0.0),
+            scale=1.0
         )
     
     def _create_particle_burst(self, t: float) -> List[SceneObject]:
@@ -305,8 +356,8 @@ class DreamGenerator:
             particles.append(SceneObject(
                 triangles=triangles,
                 shader_id="wireframe",
-                position=(x, y, z),
-                scale=(1.0, 1.0, 1.0)
+                position=Vec3(x, y, z),
+                scale=1.0
             ))
         
         return particles
