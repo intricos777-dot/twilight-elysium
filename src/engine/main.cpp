@@ -1,12 +1,12 @@
 #include "engine.h"
 #include "../renderer/renderer.h"
+#include "../ai/canon_story.h"
+#include "../game/hackgu/hackgu_world_builder.h"
 #include <cstdio>
 #include <cstring>
 
 namespace {
 
-// Headless smoke: attach a ticking system, run 60 frames, assert the loop
-// closes and the tick actually fired. This is what CTest runs as te-core.
 int bounded_smoke() {
     te::Engine& engine = te::Engine::instance();
     uint64_t ticks = 0;
@@ -22,7 +22,7 @@ int bounded_smoke() {
         std::fprintf(stderr, "[smoke] engine init failed\n");
         return 1;
     }
-    engine.run(60);   // bounded: the loop must close
+    engine.run(60);
 
     const bool ticked = ticks == 60u && last_frame == 60u;
     std::printf("[smoke] ran %llu frames, tick fired %llu times - %s\n",
@@ -31,11 +31,70 @@ int bounded_smoke() {
     engine.shutdown();
     return ticked ? 0 : 1;
 }
+
+int hackgu_discs_smoke() {
+    using namespace te::hackgu;
+    DiscWorldBuilder builder;
+    builder.register_disc({
+        "disc1",
+        ".hack//G.U. Disc 1: Infection",
+        "infection",
+        1,
+        "/home/sin/Projects/hackgu-modding/extract/vol1_i/vol1/data/data",
+        {}
+    });
+    builder.register_disc({
+        "disc2",
+        ".hack//G.U. Disc 2: Rebirth",
+        "gu_returner",
+        2,
+        "/home/sin/Projects/hackgu-modding/extract/vol2_a/vol2/data/data",
+        {}
+    });
+    builder.register_disc({
+        "disc3",
+        ".hack//G.U. Disc 3: Reminisce",
+        "gu_returner",
+        3,
+        "/home/sin/Projects/hackgu-modding/extract/vol3_a/vol3/data/data",
+        {}
+    });
+    builder.register_disc({
+        "disc4",
+        ".hack//G.U. Disc 4: Quarantine",
+        "gu_returner",
+        4,
+        "/home/sin/Projects/hackgu-modding/extract/vol2_a_pc/vol2/data/data",
+        {}
+    });
+
+    const auto discs = builder.available_discs();
+    bool ok = discs.size() == 4;
+    std::printf("[hackgu] registered discs: %zu\n", discs.size());
+    for (const auto& d : discs) {
+        std::printf("[hackgu]   - %s: %s\n", d.id.c_str(), d.title.c_str());
+        if (!d.title.starts_with(".hack")) ok = false;
+    }
+
+    bool built_all = true;
+    for (const auto& d : discs) {
+        if (!builder.build_world_for_disc(d.id)) {
+            std::fprintf(stderr, "[hackgu] build failed for %s\n", d.id.c_str());
+            built_all = false;
+        }
+    }
+
+    const bool passed = ok && built_all;
+    std::printf("[hackgu] discs smoke - %s\n", passed ? "PASS" : "FAIL");
+    return passed ? 0 : 1;
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         if (std::strcmp(argv[i], "--bounded") == 0) return bounded_smoke();
+        if (std::strcmp(argv[i], "--hackgu-discs") == 0) return hackgu_discs_smoke();
     }
 
     te::Engine engine;
@@ -45,7 +104,7 @@ int main(int argc, char** argv) {
     cfg.window_height = 720;
     cfg.base_width = 640;
     cfg.base_height = 360;
-    cfg.scale_mode = 4; // ScaleMode::Optimized
+    cfg.scale_mode = 4;
 
     if (argc > 1 && std::strcmp(argv[1], "--auto") == 0) cfg.scale_mode = 5;
     else if (argc > 1 && std::strcmp(argv[1], "--integer") == 0) { cfg.scale_mode = 0; cfg.base_width = 1920; cfg.base_height = 1080; }

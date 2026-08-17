@@ -36,10 +36,32 @@ add_library(te-pipeline STATIC
 )
 target_link_libraries(te-pipeline PRIVATE te-engine)
 
+# Seele AI Module - procedural generation, upscaling, and canon story
+add_library(te-ai STATIC
+    src/ai/seele_ai.cpp
+    src/ai/hackgu_content.cpp
+    src/ai/canon_story.cpp
+)
+target_include_directories(te-ai PUBLIC src)
+
+# Seele Shader Generation Module - 3D world building
+add_library(te-shading STATIC
+    src/game/legend_of_dragoon/rendering/seele_shader.cpp
+)
+
+# .hack//G.U. remake module built on Twilight Elysium
+add_library(te-hackgu STATIC
+    src/game/hackgu/hackgu_world_builder.cpp
+    src/ai/hackgu_content.cpp
+)
+target_link_libraries(te-hackgu PRIVATE te-ai te-lod)
+target_include_directories(te-hackgu PUBLIC src)
+
 add_library(te-lod STATIC
     src/game/legend_of_dragoon/character/character.cpp
     src/game/legend_of_dragoon/combat/combat.cpp
     src/game/legend_of_dragoon/world/world.cpp
+    src/game/legend_of_dragoon/world/world_integration.cpp
     src/game/legend_of_dragoon/stage/stage.cpp
     src/game/legend_of_dragoon/legend_of_dragoon.cpp
     src/game/legend_of_dragoon/progression/progression.cpp
@@ -49,10 +71,18 @@ add_library(te-lod STATIC
     src/platform/runtime_factory.cpp
     src/platform/distribution/satalight_distributor.cpp
 )
-target_link_libraries(te-lod PRIVATE te-engine te-renderer te-shader te-pipeline)
+target_link_libraries(te-lod PRIVATE 
+    te-engine 
+    te-renderer 
+    te-shader 
+    te-pipeline 
+    te-ai
+    te-shading
+)
 
 enable_testing()
 add_executable(te-test src/engine/main.cpp)
-target_link_libraries(te-test PRIVATE te-engine te-lod)
+target_link_libraries(te-test PRIVATE te-engine te-lod te-hackgu)
 # Headless bounded smoke: the engine loop must close and tick 60 frames
 add_test(NAME te-core COMMAND te-test --bounded)
+add_test(NAME te-hackgu-discs COMMAND te-test --hackgu-discs)
