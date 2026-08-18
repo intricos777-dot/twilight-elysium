@@ -48,4 +48,6 @@ inline Mat4 Mat4::scale(const Vec3& s) {
     return m;
 }
 
+using mtx = Mat4;
+
 } // namespace te
