@@ -19,6 +19,8 @@ add_library(te-renderer STATIC
     src/renderer/renderer.cpp
     src/renderer/sdl2_renderer.cpp
     src/renderer/seele_world_renderer.cpp
+    src/renderer/model_generator.cpp
+    src/renderer/complete_world_builder.cpp
     src/renderer/material/material.cpp
 )
 target_include_directories(te-renderer PUBLIC src)
@@ -99,6 +101,10 @@ target_link_libraries(te-test PRIVATE te-engine te-lod te-hackgu te-renderer)
 # SDL2 world renderer test
 add_executable(te-sdl2-world tests/sdl2_world_test.cpp)
 target_link_libraries(te-sdl2-world PRIVATE te-engine te-renderer te-ai te-hackgu)
+
+# Complete world builder test
+add_executable(te-complete tests/complete_world_test.cpp)
+target_link_libraries(te-complete PRIVATE te-engine te-renderer te-ai te-hackgu)
 
 # Headless bounded smoke: the engine loop must close and tick 60 frames
 add_test(NAME te-core COMMAND te-test --bounded)
