@@ -105,6 +105,7 @@ private:
     
     // Zone data
     struct ZoneData {
+        std::string id;
         std::string name;
         std::string type;
         int sky[3];

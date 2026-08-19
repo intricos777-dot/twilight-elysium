@@ -21,18 +21,29 @@ add_library(te-renderer STATIC
     src/renderer/seele_world_renderer.cpp
     src/renderer/model_generator.cpp
     src/renderer/complete_world_builder.cpp
+    src/renderer/twilight_ue_renderer.cpp
     src/renderer/material/material.cpp
 )
 target_include_directories(te-renderer PUBLIC src)
-target_link_libraries(te-renderer PRIVATE te-engine ${CMAKE_DL_LIBS})
 
-# Find SDL2 and GL
+# Find packages
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 
-target_include_directories(te-renderer PUBLIC src ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
-target_link_libraries(te-renderer PUBLIC ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES})
+target_include_directories(te-renderer PUBLIC 
+    src 
+    ${SDL2_INCLUDE_DIRS} 
+    ${OPENGL_INCLUDE_DIR}
+    ${GLEW_INCLUDE_DIRS}
+)
+target_link_libraries(te-renderer PRIVATE te-engine ${CMAKE_DL_LIBS})
+target_link_libraries(te-renderer PUBLIC 
+    ${SDL2_LIBRARIES} 
+    ${OPENGL_LIBRARIES}
+    GLEW::GLEW
+)
 
 add_library(te-shader STATIC
     src/shader/shader_stub.cpp
