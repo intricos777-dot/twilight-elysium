@@ -38,7 +38,14 @@ int main(int argc, char** argv) {
     AssetManager am;
     CHECK(am.importFromGlb(path), "AssetManager imported Seele GLB");
 
-    const MeshData* m = am.mesh("char_kite");
+    // Registered name = file stem of the passed path.
+    std::string stem = path;
+    size_t slash = stem.find_last_of('/');
+    if (slash != std::string::npos) stem = stem.substr(slash + 1);
+    size_t dot = stem.find_last_of('.');
+    if (dot != std::string::npos) stem = stem.substr(0, dot);
+
+    const MeshData* m = am.mesh(stem);
     CHECK(m != nullptr, "mesh registered by stem name");
     if (m) {
         std::printf("  [info] name=%s verts=%u faces=%u normals=%d uvs=%d\n",

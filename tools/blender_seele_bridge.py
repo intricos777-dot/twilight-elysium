@@ -179,6 +179,135 @@ class BlenderModelGen:
         self._register_object(obj)
         return obj
     
+    def generate_nobody_character(self, character_type="zero", height=1.8):
+        """Generate Zero — a darker Nobody-shadow of the spiky-haired
+        keyblade-wielder archetype. Black coat, pale masked face, coal
+        spiky crown, twin red blades sheathed at the hips, silver trim.
+        (KH-zero protagonist; see docs/GDD.md.)"""
+        import math as _m
+        existing = set(bpy.data.objects.keys())
+
+        COAT   = (0.06, 0.07, 0.10)   # nobody black
+        HAIR   = (0.11, 0.06, 0.05)   # coal-dark
+        PALE   = (0.78, 0.76, 0.73)   # masked face
+        RED    = (0.55, 0.05, 0.05)   # twin blades
+        SILVER = (0.72, 0.74, 0.80)   # trim / keychain
+
+        # Torso (Nobody coat)
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, height * 0.5))
+        body = bpy.context.active_object
+        body.name = f"{character_type}_body"
+        body.scale = (0.32, 0.22, 0.42)
+        bpy.ops.object.transform_apply(scale=True)
+
+        # Coat skirt (flowing hem)
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, height * 0.28))
+        skirt = bpy.context.active_object
+        skirt.name = f"{character_type}_skirt"
+        skirt.scale = (0.38, 0.30, 0.16)
+        bpy.ops.object.transform_apply(scale=True)
+
+        # Head (pale, mask-like)
+        bpy.ops.mesh.primitive_uv_sphere_add(
+            radius=height * 0.075, location=(0, 0, height * 0.85)
+        )
+        head = bpy.context.active_object
+        head.name = f"{character_type}_head"
+
+        # Cowl behind the head (Nobody hood)
+        bpy.ops.mesh.primitive_cube_add(
+            size=1, location=(0, -height * 0.02, height * 0.74)
+        )
+        cowl = bpy.context.active_object
+        cowl.name = f"{character_type}_cowl"
+        cowl.scale = (0.34, 0.14, 0.20)
+        bpy.ops.object.transform_apply(scale=True)
+
+        # Spiky crown — 8 outward cones, coal-dark (the Sora silhouette,
+        # swallowed by shadow)
+        for i in range(8):
+            yaw = i * _m.pi / 4.0
+            bpy.ops.mesh.primitive_cone_add(
+                radius1=height * 0.018, radius2=0.0, depth=height * 0.16,
+                location=(_m.cos(yaw) * height * 0.05,
+                          _m.sin(yaw) * height * 0.05,
+                          height * 0.95)
+            )
+            spike = bpy.context.active_object
+            spike.name = f"{character_type}_spike_{i}"
+            spike.rotation_euler = (_m.pi * 0.55, 0.0, -yaw)
+            bpy.ops.object.transform_apply(rotation=True)
+
+        # Forelock spikes (forward lean)
+        for i in range(3):
+            yaw = 0.35 - i * 0.28
+            bpy.ops.mesh.primitive_cone_add(
+                radius1=height * 0.016, radius2=0.0, depth=height * 0.14,
+                location=(yaw * height * 0.8, 0.0, height * 0.93)
+            )
+            fore = bpy.context.active_object
+            fore.name = f"{character_type}_fore_{i}"
+            fore.rotation_euler = (0.0, -_m.pi * 0.28, -yaw * 0.25)
+            bpy.ops.object.transform_apply(rotation=True)
+
+        # Arms
+        for side in [-1, 1]:
+            bpy.ops.mesh.primitive_cube_add(
+                size=1, location=(side * height * 0.21, 0, height * 0.5)
+            )
+            arm = bpy.context.active_object
+            arm.name = f"{character_type}_arm_{'L' if side < 0 else 'R'}"
+            arm.scale = (0.05, 0.05, 0.30)
+            bpy.ops.object.transform_apply(scale=True)
+
+        # Legs + boots
+        for side in [-1, 1]:
+            bpy.ops.mesh.primitive_cube_add(
+                size=1, location=(side * height * 0.09, 0, height * 0.22)
+            )
+            leg = bpy.context.active_object
+            leg.name = f"{character_type}_leg_{'L' if side < 0 else 'R'}"
+            leg.scale = (0.08, 0.08, 0.22)
+            bpy.ops.object.transform_apply(scale=True)
+            bpy.ops.mesh.primitive_cube_add(
+                size=1, location=(side * height * 0.09, 0, height * 0.08)
+            )
+            boot = bpy.context.active_object
+            boot.name = f"{character_type}_boot_{'L' if side < 0 else 'R'}"
+            boot.scale = (0.11, 0.10, 0.06)
+            bpy.ops.object.transform_apply(scale=True)
+
+        # Twin red blades sheathed at the hips
+        for side in [-1, 1]:
+            bpy.ops.mesh.primitive_cube_add(
+                size=1, location=(side * height * 0.17, height * 0.03, height * 0.34)
+            )
+            blade = bpy.context.active_object
+            blade.name = f"{character_type}_blade_{'L' if side < 0 else 'R'}"
+            blade.scale = (0.03, 0.015, 0.26)
+            bpy.ops.object.transform_apply(scale=True)
+
+        # Silver keychain charm at the belt
+        bpy.ops.mesh.primitive_uv_sphere_add(
+            radius=height * 0.012, location=(0, height * 0.03, height * 0.40)
+        )
+        charm = bpy.context.active_object
+        charm.name = f"{character_type}_charm"
+
+        # Select only newly created objects and join
+        new_objects = [bpy.data.objects[name] for name in bpy.data.objects.keys() if name not in existing]
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in new_objects:
+            obj.select_set(True)
+        bpy.context.view_layer.objects.active = body
+        bpy.ops.object.join()
+
+        obj = bpy.context.active_object
+        obj.name = f"char_{character_type}"
+        self._apply_material(obj, "mythic", COAT)
+        self._register_object(obj)
+        return obj
+    
     def generate_monster(self, monster_type="skeleton", height=1.7):
         """Generate a monster mesh."""
         existing = set(bpy.data.objects.keys())
@@ -567,6 +696,11 @@ def main():
     if args.model_type in ("all", "character"):
         for c in ["kite", "haseo", "blackrose", "balung"]:
             gen.generate_character(c)
+    
+    if args.model_type in ("all", "nobody"):
+        # KH-zero protagonist: darker Nobody-shadow of the spiky-haired
+        # keyblade-wielder archetype (docs/GDD.md).
+        gen.generate_nobody_character("zero")
     
     if args.model_type in ("all", "monster"):
         for m in ["skeleton", "corrupted", "golem", "shadow", "boss"]:
