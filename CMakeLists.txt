@@ -130,8 +130,13 @@ target_link_libraries(te-complete PRIVATE te-engine te-renderer te-ai te-hackgu)
 add_executable(te-asset-smoke tests/asset_smoke_test.cpp)
 target_link_libraries(te-asset-smoke PRIVATE te-engine te-asset te-pipeline te-shader)
 
+# Worldflesh exemplar: mythic zone ledger + committed Seele exports
+add_executable(te-worldflesh tests/worldflesh_test.cpp)
+target_link_libraries(te-worldflesh PRIVATE te-engine te-renderer te-ai te-asset)
+
 # Headless bounded smoke: the engine loop must close and tick 60 frames
 add_test(NAME te-core COMMAND te-test --bounded)
 add_test(NAME te-hackgu-discs COMMAND te-test --hackgu-discs)
 add_test(NAME te-sdl2-world COMMAND te-sdl2-world --headless)
 add_test(NAME te-asset-smoke COMMAND te-asset-smoke)
+add_test(NAME te-worldflesh COMMAND te-worldflesh)

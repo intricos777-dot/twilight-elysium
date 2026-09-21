@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "disc_id": "twilight",
+  "description": "Mythic world zones for twilight-elysium — Seele world-block + character placement (flavor: mythic).",
+  "zones": [
+    {
+      "id": "twilight_twilight_realm",
+      "name": "Twilight Realm",
+      "type": "field",
+      "sky": [35, 5, 45],
+      "ground": [180, 160, 220],
+      "fog": 45,
+      "structures": ["tower", "monolith", "crystal"],
+      "npcs": ["Balung"],
+      "monsters": ["Shadow", "Golem"]
+    },
+    {
+      "id": "twilight_silver_sanctum",
+      "name": "Silver Sanctum",
+      "type": "dungeon",
+      "sky": [10, 10, 25],
+      "ground": [150, 150, 170],
+      "fog": 70,
+      "structures": ["gate", "pillar", "monolith"],
+      "npcs": ["BlackRose", "Balung"],
+      "monsters": ["Skeleton", "Corrupted"]
+    },
+    {
+      "id": "twilight_barrow_of_balung",
+      "name": "Barrow of Balung",
+      "type": "crypt",
+      "sky": [5, 2, 8],
+      "ground": [120, 110, 130],
+      "fog": 80,
+      "structures": ["pillar", "crystal", "tower"],
+      "npcs": ["Balung"],
+      "monsters": ["Data Bug", "Boss"]
+    }
+  ]
+}
