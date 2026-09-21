@@ -48,6 +48,7 @@ target_link_libraries(te-renderer PUBLIC
 add_library(te-shader STATIC
     src/shader/shader_stub.cpp
 )
+target_include_directories(te-shader PUBLIC assets/shaders)
 target_link_libraries(te-shader PRIVATE te-engine)
 
 add_library(te-asset STATIC
@@ -58,11 +59,13 @@ target_link_libraries(te-asset PRIVATE te-engine)
 add_library(te-pipeline STATIC
     src/pipeline/frame_graph_stub.cpp
 )
-target_link_libraries(te-pipeline PRIVATE te-engine)
+target_include_directories(te-pipeline PUBLIC src/pipeline)
+target_link_libraries(te-pipeline PRIVATE te-engine te-shader)
 
 # Seele AI Module - procedural generation, upscaling, and canon story
 add_library(te-ai STATIC
     src/ai/seele_ai.cpp
+    src/ai/blender_asset_loader.cpp
     src/ai/hackgu_content.cpp
     src/ai/canon_story.cpp
 )
@@ -72,6 +75,7 @@ target_include_directories(te-ai PUBLIC src)
 add_library(te-shading STATIC
     src/game/legend_of_dragoon/rendering/seele_shader.cpp
 )
+target_include_directories(te-shading PUBLIC src/game/legend_of_dragoon/rendering)
 
 # .hack//G.U. remake module built on Twilight Elysium
 add_library(te-hackgu STATIC

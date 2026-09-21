@@ -1,0 +1,201 @@
+{
+  "models": [
+    {
+      "name": "tree_oak",
+      "path": "/home/sin/.twilight-elys/blender_export/tree_oak.glb",
+      "format": "glTF",
+      "vertices": 106,
+      "faces": 114
+    },
+    {
+      "name": "tree_pine",
+      "path": "/home/sin/.twilight-elys/blender_export/tree_pine.glb",
+      "format": "glTF",
+      "vertices": 97,
+      "faces": 67
+    },
+    {
+      "name": "tree_willow",
+      "path": "/home/sin/.twilight-elys/blender_export/tree_willow.glb",
+      "format": "glTF",
+      "vertices": 106,
+      "faces": 114
+    },
+    {
+      "name": "tree_bamboo",
+      "path": "/home/sin/.twilight-elys/blender_export/tree_bamboo.glb",
+      "format": "glTF",
+      "vertices": 128,
+      "faces": 68
+    },
+    {
+      "name": "tree_cedar",
+      "path": "/home/sin/.twilight-elys/blender_export/tree_cedar.glb",
+      "format": "glTF",
+      "vertices": 97,
+      "faces": 67
+    },
+    {
+      "name": "char_kite",
+      "path": "/home/sin/.twilight-elys/blender_export/char_kite.glb",
+      "format": "glTF",
+      "vertices": 522,
+      "faces": 542
+    },
+    {
+      "name": "char_haseo",
+      "path": "/home/sin/.twilight-elys/blender_export/char_haseo.glb",
+      "format": "glTF",
+      "vertices": 522,
+      "faces": 542
+    },
+    {
+      "name": "char_blackrose",
+      "path": "/home/sin/.twilight-elys/blender_export/char_blackrose.glb",
+      "format": "glTF",
+      "vertices": 522,
+      "faces": 542
+    },
+    {
+      "name": "char_balung",
+      "path": "/home/sin/.twilight-elys/blender_export/char_balung.glb",
+      "format": "glTF",
+      "vertices": 522,
+      "faces": 542
+    },
+    {
+      "name": "monster_skeleton",
+      "path": "/home/sin/.twilight-elys/blender_export/monster_skeleton.glb",
+      "format": "glTF",
+      "vertices": 490,
+      "faces": 518
+    },
+    {
+      "name": "monster_corrupted",
+      "path": "/home/sin/.twilight-elys/blender_export/monster_corrupted.glb",
+      "format": "glTF",
+      "vertices": 490,
+      "faces": 518
+    },
+    {
+      "name": "monster_golem",
+      "path": "/home/sin/.twilight-elys/blender_export/monster_golem.glb",
+      "format": "glTF",
+      "vertices": 490,
+      "faces": 518
+    },
+    {
+      "name": "monster_shadow",
+      "path": "/home/sin/.twilight-elys/blender_export/monster_shadow.glb",
+      "format": "glTF",
+      "vertices": 490,
+      "faces": 518
+    },
+    {
+      "name": "monster_boss",
+      "path": "/home/sin/.twilight-elys/blender_export/monster_boss.glb",
+      "format": "glTF",
+      "vertices": 490,
+      "faces": 518
+    },
+    {
+      "name": "weapon_sword",
+      "path": "/home/sin/.twilight-elys/blender_export/weapon_sword.glb",
+      "format": "glTF",
+      "vertices": 72,
+      "faces": 40
+    },
+    {
+      "name": "weapon_greatsword",
+      "path": "/home/sin/.twilight-elys/blender_export/weapon_greatsword.glb",
+      "format": "glTF",
+      "vertices": 8,
+      "faces": 6
+    },
+    {
+      "name": "weapon_staff",
+      "path": "/home/sin/.twilight-elys/blender_export/weapon_staff.glb",
+      "format": "glTF",
+      "vertices": 64,
+      "faces": 34
+    },
+    {
+      "name": "weapon_spear",
+      "path": "/home/sin/.twilight-elys/blender_export/weapon_spear.glb",
+      "format": "glTF",
+      "vertices": 8,
+      "faces": 6
+    },
+    {
+      "name": "weapon_dagger",
+      "path": "/home/sin/.twilight-elys/blender_export/weapon_dagger.glb",
+      "format": "glTF",
+      "vertices": 8,
+      "faces": 6
+    },
+    {
+      "name": "struct_tower",
+      "path": "/home/sin/.twilight-elys/blender_export/struct_tower.glb",
+      "format": "glTF",
+      "vertices": 16,
+      "faces": 10
+    },
+    {
+      "name": "struct_pillar",
+      "path": "/home/sin/.twilight-elys/blender_export/struct_pillar.glb",
+      "format": "glTF",
+      "vertices": 24,
+      "faces": 14
+    },
+    {
+      "name": "struct_gate",
+      "path": "/home/sin/.twilight-elys/blender_export/struct_gate.glb",
+      "format": "glTF",
+      "vertices": 24,
+      "faces": 18
+    },
+    {
+      "name": "struct_crystal",
+      "path": "/home/sin/.twilight-elys/blender_export/struct_crystal.glb",
+      "format": "glTF",
+      "vertices": 42,
+      "faces": 80
+    },
+    {
+      "name": "struct_monolith",
+      "path": "/home/sin/.twilight-elys/blender_export/struct_monolith.glb",
+      "format": "glTF",
+      "vertices": 8,
+      "faces": 6
+    },
+    {
+      "name": "item_potion",
+      "path": "/home/sin/.twilight-elys/blender_export/item_potion.glb",
+      "format": "glTF",
+      "vertices": 64,
+      "faces": 34
+    },
+    {
+      "name": "item_crystal",
+      "path": "/home/sin/.twilight-elys/blender_export/item_crystal.glb",
+      "format": "glTF",
+      "vertices": 42,
+      "faces": 80
+    },
+    {
+      "name": "item_key",
+      "path": "/home/sin/.twilight-elys/blender_export/item_key.glb",
+      "format": "glTF",
+      "vertices": 8,
+      "faces": 6
+    },
+    {
+      "name": "sky_grid",
+      "path": "/home/sin/.twilight-elys/blender_export/sky_grid.glb",
+      "format": "glTF",
+      "vertices": 484,
+      "faces": 441
+    }
+  ],
+  "count": 28
+}
