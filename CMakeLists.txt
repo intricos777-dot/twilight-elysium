@@ -46,18 +46,23 @@ target_link_libraries(te-renderer PUBLIC
 )
 
 add_library(te-shader STATIC
-    src/shader/shader_stub.cpp
+    src/shader/shader_pipeline.cpp
 )
-target_include_directories(te-shader PUBLIC assets/shaders)
-target_link_libraries(te-shader PRIVATE te-engine)
+target_include_directories(te-shader PUBLIC assets/shaders
+    ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
+target_compile_definitions(te-shader PRIVATE TE_HAS_GL=1)
+target_link_libraries(te-shader PRIVATE te-engine GLEW::GLEW ${OPENGL_LIBRARIES})
 
 add_library(te-asset STATIC
-    src/asset/asset_stub.cpp
+    src/asset/asset_manager.cpp
 )
-target_link_libraries(te-asset PRIVATE te-engine)
+target_include_directories(te-asset PUBLIC src
+    ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
+target_compile_definitions(te-asset PRIVATE TE_HAS_GL=1)
+target_link_libraries(te-asset PRIVATE te-engine GLEW::GLEW ${OPENGL_LIBRARIES})
 
 add_library(te-pipeline STATIC
-    src/pipeline/frame_graph_stub.cpp
+    src/pipeline/render_graph.cpp
 )
 target_include_directories(te-pipeline PUBLIC src/pipeline)
 target_link_libraries(te-pipeline PRIVATE te-engine te-shader)
@@ -121,7 +126,12 @@ target_link_libraries(te-sdl2-world PRIVATE te-engine te-renderer te-ai te-hackg
 add_executable(te-complete tests/complete_world_test.cpp)
 target_link_libraries(te-complete PRIVATE te-engine te-renderer te-ai te-hackgu)
 
+# Headless module proof: Seele GLB import, render graph cull, shader compile
+add_executable(te-asset-smoke tests/asset_smoke_test.cpp)
+target_link_libraries(te-asset-smoke PRIVATE te-engine te-asset te-pipeline te-shader)
+
 # Headless bounded smoke: the engine loop must close and tick 60 frames
 add_test(NAME te-core COMMAND te-test --bounded)
 add_test(NAME te-hackgu-discs COMMAND te-test --hackgu-discs)
 add_test(NAME te-sdl2-world COMMAND te-sdl2-world --headless)
+add_test(NAME te-asset-smoke COMMAND te-asset-smoke)
