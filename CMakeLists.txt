@@ -99,6 +99,7 @@ add_library(te-lod STATIC
     src/game/legend_of_dragoon/legend_of_dragoon.cpp
     src/game/legend_of_dragoon/progression/progression.cpp
     src/game/legend_of_dragoon/menu/menu.cpp
+    src/game/data_registry.cpp
     src/platform/local_runtime.cpp
     src/platform/satalight_runtime.cpp
     src/platform/runtime_factory.cpp
